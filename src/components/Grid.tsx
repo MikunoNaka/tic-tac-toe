@@ -62,13 +62,13 @@ const Grid: React.FC<Props> = (props) => {
 
   const endGame = (winner: number) => {
     const gameWinner = winner < 2 ? (winner === 1 ? "X" : "O") : "Draw";
-    alert(`WINNER: ${gameWinner}`)
+    // clean up before alerting
+    setBoard([2,2,2,2,2,2,2,2,2]);
+    setWinner(2);
     gameWinner === "Draw" || gameWinner === "X" 
       ? props.setScoreX(props.scoreX + 1) 
       : props.setScoreO(props.scoreO + 1)
-    // clean up
-    setBoard([2,2,2,2,2,2,2,2,2]);
-    setWinner(2);
+    alert(`WINNER: ${gameWinner}`)
   }
 
   useEffect(() => {
