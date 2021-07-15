@@ -11,7 +11,7 @@ func main() {
   r.Use(gin.Logger())
 
   r.Use(static.Serve("/",
-    static.LocalFile("./../build", true)))
+    static.LocalFile("./build", true)))
 
   r.Run(":" + os.Getenv("PORT"))
 }
