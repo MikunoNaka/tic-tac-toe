@@ -1,0 +1,93 @@
+/*
+ * Tic Tac Toe - Minimalistic Tic Tac Toe
+ * Copyright (C) 2021  Vidhu Kant Sharma
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+body, #root {
+  margin: 0px;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #232627;
+  color: white;
+}
+
+.ScoreBoard { 
+  display: flex;
+  justify-content: space-between;
+  font-size: 3rem;
+  width: 20rem;
+  margin-bottom: 0.7rem;
+  margin-top: 1rem;
+}
+
+.Grid {
+  display: grid;
+  grid-template-columns: 9rem 9rem 9rem;
+  grid-template-rows: 9rem 9rem 9rem;
+  grid-row-gap: 1.5rem;
+  grid-column-gap: 1.5rem;
+}
+
+.Box {
+  border: 1px solid #5b76b7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  font-size: 7rem;
+}
+
+.Footer {
+  width: 100%;
+  padding: 0.2rem 0;
+  background-color: #0f0f0f;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.Footer p {
+  color: #a75cb8;
+  margin: 0.2rem;
+  width: 90%;
+}
+
+.Footer a {
+  color: white;
+}
+
+@media only screen and (max-width: 600px) {
+  .Grid {
+    grid-template-columns: 6rem 6rem 6rem;
+    grid-template-rows: 6rem 6rem 6rem;
+    grid-row-gap: 1.5rem;
+    grid-column-gap: 1.5rem;
+  }
+  .Box {
+    font-size: 6rem;
+  }
+  .ScoreBoard { 
+    font-size: 3.5rem;
+    width: 16rem;
+    padding-top: 1rem;
+  }
+}
