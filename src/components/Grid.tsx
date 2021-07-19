@@ -25,6 +25,8 @@ interface Props {
   scoreO: number
   setScoreX: Dispatch<SetStateAction<number>>
   setScoreO: Dispatch<SetStateAction<number>>
+  setMessage: Dispatch<SetStateAction<string>>
+  setShowMessage: Dispatch<SetStateAction<boolean>>
 }
 
 const Grid: React.FC<Props> = (props) => {
@@ -62,13 +64,13 @@ const Grid: React.FC<Props> = (props) => {
 
   const endGame = (winner: number) => {
     const gameWinner = winner < 2 ? (winner === 1 ? "X" : "O") : "Draw";
-    // clean up before alerting
+    props.setMessage(`WINNER: ${gameWinner}`);
+    props.setShowMessage(true);
+    gameWinner === "Draw" || gameWinner === "X" 
+      ? props.setScoreX(props.scoreX + 1)
+      : props.setScoreO(props.scoreO + 1);
     setBoard([2,2,2,2,2,2,2,2,2]);
     setWinner(2);
-    gameWinner === "Draw" || gameWinner === "X" 
-      ? props.setScoreX(props.scoreX + 1) 
-      : props.setScoreO(props.scoreO + 1)
-    alert(`WINNER: ${gameWinner}`)
   }
 
   useEffect(() => {

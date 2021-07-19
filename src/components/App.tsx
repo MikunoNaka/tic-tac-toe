@@ -17,6 +17,7 @@
  */
 
 import React, { useState } from 'react';
+import MessageBox from './MessageBox';
 import ScoreBoard from './ScoreBoard';
 import Grid from './Grid';
 import Footer from './Footer';
@@ -25,10 +26,13 @@ import './style.css';
 const App: React.FC = () => {
   const [scoreX, setScoreX] = useState<number>(0);
   const [scoreO, setScoreO] = useState<number>(0);
+  const [showMessageBox, setShowMessageBox] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
   return (
     <>
+      {showMessageBox && <MessageBox message={message} setShowMessage={setShowMessageBox}/>}
       <ScoreBoard scoreX={scoreX} scoreO={scoreO}/>
-      <Grid scoreX={scoreX} setScoreX={setScoreX} scoreO={scoreO} setScoreO={setScoreO}/>
+      <Grid scoreX={scoreX} setScoreX={setScoreX} scoreO={scoreO} setScoreO={setScoreO} setMessage={setMessage} setShowMessage={setShowMessageBox}/>
       <Footer/>
     </>
   );

@@ -28,6 +28,24 @@ body, #root {
   color: white;
 }
 
+.MessageBox {
+  font-size: 7rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  position: fixed;
+  top: 0; bottom: 0;
+  left: 0; right: 0;
+}
+
+
+.MessageBox p {
+  background-color: black;
+  padding: 0.5rem 2rem;
+}
+
 .ScoreBoard { 
   display: flex;
   justify-content: space-between;
@@ -76,6 +94,9 @@ body, #root {
 }
 
 @media only screen and (max-width: 600px) {
+  .MessageBox {
+    font-size: 4rem;
+  }
   .Grid {
     grid-template-columns: 6rem 6rem 6rem;
     grid-template-rows: 6rem 6rem 6rem;
