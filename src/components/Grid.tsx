@@ -80,7 +80,7 @@ const Grid: React.FC<Props> = (props) => {
   });
 
   return (
-      <div className="Grid">
+    <div className="Grid">
       {
         board.map(
           (i, index) => 

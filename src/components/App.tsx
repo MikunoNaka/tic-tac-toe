@@ -9,8 +9,7 @@
  * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  * 
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
@@ -20,20 +19,51 @@ import React, { useState } from 'react';
 import MessageBox from './MessageBox';
 import ScoreBoard from './ScoreBoard';
 import Grid from './Grid';
+import MultiplayerGrid from './MultiplayerGrid';
 import Footer from './Footer';
 import './style.css';
 
 const App: React.FC = () => {
   const [scoreX, setScoreX] = useState<number>(0);
   const [scoreO, setScoreO] = useState<number>(0);
-  const [turn, setTurn] = useState<number>(0);
+  const [turn, setTurn] = useState<number>(1);
   const [showMessageBox, setShowMessageBox] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
+  const mp: boolean = true;
   return (
     <>
-      {showMessageBox && <MessageBox message={message} setShowMessage={setShowMessageBox}/>}
-      <ScoreBoard turn={turn} scoreX={scoreX} scoreO={scoreO}/>
-      <Grid turn={turn} setTurn={setTurn} scoreX={scoreX} setScoreX={setScoreX} scoreO={scoreO} setScoreO={setScoreO} setMessage={setMessage} setShowMessage={setShowMessageBox}/>
+      {showMessageBox && 
+        <MessageBox 
+          message={message} 
+          setShowMessage={setShowMessageBox}
+        />
+      }
+
+      <ScoreBoard 
+        turn={turn} 
+        scoreX={scoreX} 
+        scoreO={scoreO}
+      />
+
+      {mp ? <MultiplayerGrid 
+          turn={turn} 
+          setTurn={setTurn} 
+          scoreX={scoreX} 
+          setScoreX={setScoreX} 
+          scoreO={scoreO} setScoreO={setScoreO} 
+          setMessage={setMessage} 
+          setShowMessage={setShowMessageBox}
+        /> : <MultiplayerGrid 
+          turn={turn} 
+          setTurn={setTurn} 
+          scoreX={scoreX} 
+          setScoreX={setScoreX} 
+          scoreO={scoreO} setScoreO={setScoreO} 
+          setMessage={setMessage} 
+          setShowMessage={setShowMessageBox}
+        />
+      }
+
       <Footer/>
     </>
   );
