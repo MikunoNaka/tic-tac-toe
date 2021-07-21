@@ -52,11 +52,11 @@ body {
   position: fixed;
   top: 0; bottom: 0;
   left: 0; right: 0;
+  z-index: 10;
 }
 
-
 .MessageBox p {
-  background-color: black;
+  background-color: #000000dd;
   padding: 0.5rem 2rem;
 }
 
