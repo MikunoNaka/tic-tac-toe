@@ -22,13 +22,17 @@ import './style.css';
 interface Props {
   scoreX: number
   scoreO: number
+  turn: number
 }
 
 const ScoreBoard: React.FC<Props> = (props) => {
   return (
-    <div className={"ScoreBoard"}>
-      <span>X: {props.scoreX}</span>
-      <span>O: {props.scoreO}</span>
+    <div className={"ScoreBoardContainer"}>
+      <div className={"ScoreBoard"}>
+        <span>X: {props.scoreX}</span>
+        <span>O: {props.scoreO}</span>
+      </div>
+      <div className={"turnMessage"}>-- {props.turn === 0 ? "O" : "X"}'s turn --</div>
     </div>
   );
 }

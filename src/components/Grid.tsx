@@ -21,6 +21,8 @@ import Box from './Box';
 import './style.css';
 
 interface Props {
+  turn: number
+  setTurn: Dispatch<SetStateAction<number>>
   scoreX: number
   scoreO: number
   setScoreX: Dispatch<SetStateAction<number>>
@@ -32,11 +34,11 @@ interface Props {
 const Grid: React.FC<Props> = (props) => {
   // 0 is O, 1 is X, 2 is blank
   const [board, setBoard] = useState<number[]>([2,2,2,2,2,2,2,2,2]);
-  const [turn, setTurn] = useState<number>(1);
+  const turn = props.turn;
 
   const getBoard = (index: number) => {
     setBoard(board.slice(0, index).concat(turn).concat(board.slice(index+1, 9)));
-    setTurn(turn === 1 ? 0 : 1)
+    props.setTurn(turn === 1 ? 0 : 1)
   }
 
   const allEqual = (arr: number[]) =>
@@ -64,6 +66,7 @@ const Grid: React.FC<Props> = (props) => {
       ? props.setScoreX(props.scoreX + 1)
       : props.setScoreO(props.scoreO + 1));
     setBoard([2,2,2,2,2,2,2,2,2]);
+    winner < 2 && props.setTurn(winner); // set turn to prev. winner
   }
 
   useEffect(() => {
@@ -77,7 +80,7 @@ const Grid: React.FC<Props> = (props) => {
   });
 
   return (
-    <div className="Grid">
+      <div className="Grid">
       {
         board.map(
           (i, index) => 

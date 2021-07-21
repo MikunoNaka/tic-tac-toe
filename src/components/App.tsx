@@ -26,13 +26,14 @@ import './style.css';
 const App: React.FC = () => {
   const [scoreX, setScoreX] = useState<number>(0);
   const [scoreO, setScoreO] = useState<number>(0);
+  const [turn, setTurn] = useState<number>(0);
   const [showMessageBox, setShowMessageBox] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
   return (
     <>
       {showMessageBox && <MessageBox message={message} setShowMessage={setShowMessageBox}/>}
-      <ScoreBoard scoreX={scoreX} scoreO={scoreO}/>
-      <Grid scoreX={scoreX} setScoreX={setScoreX} scoreO={scoreO} setScoreO={setScoreO} setMessage={setMessage} setShowMessage={setShowMessageBox}/>
+      <ScoreBoard turn={turn} scoreX={scoreX} scoreO={scoreO}/>
+      <Grid turn={turn} setTurn={setTurn} scoreX={scoreX} setScoreX={setScoreX} scoreO={scoreO} setScoreO={setScoreO} setMessage={setMessage} setShowMessage={setShowMessageBox}/>
       <Footer/>
     </>
   );
