@@ -1,1 +1,1 @@
-web: bin/tic-tac-toe
+web: node src/server/index.js
