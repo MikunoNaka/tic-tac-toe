@@ -41,14 +41,27 @@ const MultiplayerGrid: React.FC<Props> = (props) => {
 
   const getBoard = (index: number) => {
     const newBoard: number[] = board.slice(0, index).concat(turn).concat(board.slice(index+1, 9));
-    socket.emit("update-remote-board", newBoard);
-    props.setTurn(turn === 1 ? 0 : 1);
+    socket.emit("update-remote-data", {board: newBoard, turn: turn});
+    // props.setTurn(turn === 0 ? 1 : 0);
+  }
+
+  const endGame = (winner: number) => {
+    const gameWinner = winner < 2 ? (winner === 1 ? "X" : "O") : "Draw";
+    props.setMessage(`WINNER: ${gameWinner}`);
+    props.setShowMessage(true);
+    gameWinner === "Draw" || (gameWinner === "X"
+      ? props.setScoreX(props.scoreX + 1)
+      : props.setScoreO(props.scoreO + 1));
+    socket.emit("update-remote-board", [2,2,2,2,2,2,2,2,2]);
+    winner < 2 && props.setTurn(winner); // set turn to prev. winner
   }
 
   useState(() => {
-    socket.on("update-client-board", (remoteBoard) => {
-      setBoard(remoteBoard);
+    socket.on("update-client-data", (data) => {
+      setBoard(data.board);
+      props.setTurn(data.turn);
     });
+    socket.on("set winner", (turn) => endGame(turn));
   });
 
   return (

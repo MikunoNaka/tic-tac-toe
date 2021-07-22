@@ -43,16 +43,15 @@ const getRightDiagonal = (board, i = 2) =>
 // });
 
 io.on('connection', (socket) => {
-  socket.on('update-remote-board', (board) => {
-    if (board.includes(0) || board.includes(1)) {
-      const rows = getRows(board);
+  socket.on('update-remote-data', (data) => {
+    if (data.board.includes(0) || data.board.includes(1)) {
+      const rows = getRows(data.board);
       (rows.some((i) => allEqual(i))
         || getCols(rows).some((i) => allEqual(i))
-        || [getLeftDiagonal(board), getRightDiagonal(board)].some((i) => allEqual(i))
-      ) ? console.log("win") : (board.includes(2) || console.log("maybe draw"))
-      // ? endGame(turn === 0 ? 1 : 0) : (board.includes(2) || endGame(2));
+        || [getLeftDiagonal(data.board), getRightDiagonal(data.board)].some((i) => allEqual(i))
+      ) ? io.emit('set winner') : (data.board.includes(2) || io.emit('set draw'))
     }
-    io.emit('update-client-board', board)
+    io.emit('update-client-data', {board: data.board, turn: data.turn === 0 ? 1 : 0});
   })
 });
 
