@@ -53,7 +53,7 @@ const App: React.FC = () => {
           scoreO={scoreO} setScoreO={setScoreO} 
           setMessage={setMessage} 
           setShowMessage={setShowMessageBox}
-        /> : <MultiplayerGrid 
+        /> : <Grid 
           turn={turn} 
           setTurn={setTurn} 
           scoreX={scoreX} 

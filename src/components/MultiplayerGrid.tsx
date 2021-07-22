@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useState, useEffect, Dispatch, SetStateAction } from 'react';
+import React, { useState/*, useEffect*/, Dispatch, SetStateAction } from 'react';
 import { io } from 'socket.io-client';
 import Box from './Box';
 import './style.css';
@@ -49,10 +49,14 @@ const MultiplayerGrid: React.FC<Props> = (props) => {
     const gameWinner = winner < 2 ? (winner === 1 ? "X" : "O") : "Draw";
     props.setMessage(`WINNER: ${gameWinner}`);
     props.setShowMessage(true);
+    console.log(gameWinner, "X: ", props.scoreX, "O: ", props.scoreO);
+
     gameWinner === "Draw" || (gameWinner === "X"
       ? props.setScoreX(props.scoreX + 1)
       : props.setScoreO(props.scoreO + 1));
-    socket.emit("update-remote-board", [2,2,2,2,2,2,2,2,2]);
+
+    console.log(gameWinner, "X: ", props.scoreX, "O: ", props.scoreO);
+    socket.emit("update-remote-data", {board: [2,2,2,2,2,2,2,2,2], turn: turn});
     winner < 2 && props.setTurn(winner); // set turn to prev. winner
   }
 
