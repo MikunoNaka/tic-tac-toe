@@ -23,13 +23,13 @@ import MultiplayerGrid from './MultiplayerGrid';
 import Footer from './Footer';
 import './style.css';
 
-const App: React.FC = () => {
-  const [scoreX, setScoreX] = useState<number>(0);
-  const [scoreO, setScoreO] = useState<number>(0);
-  const [turn, setTurn] = useState<number>(1);
-  const [showMessageBox, setShowMessageBox] = useState<boolean>(false);
-  const [message, setMessage] = useState<string>("");
-  const mp: boolean = true;
+const App = () => {
+  const [scoreX, setScoreX] = useState(0);
+  const [scoreO, setScoreO] = useState(0);
+  const [turn, setTurn] = useState(1);
+  const [showMessageBox, setShowMessageBox] = useState(false);
+  const [message, setMessage] = useState("");
+  const mp = true;
   return (
     <>
       {showMessageBox && 

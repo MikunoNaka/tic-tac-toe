@@ -16,20 +16,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, {Dispatch, SetStateAction} from 'react';
+import React from 'react';
 import './style.css';
 
-interface Props {
-  message: string
-  setShowMessage: Dispatch<SetStateAction<boolean>>
-}
-
-const MessageBox: React.FC<Props> = (props) => {
+const Box = (props) => {
+  const handleClick = () => {
+    props.sign === 2 &&
+      props.setSign(props.index)
+  }
+  
   return (
-    <div className={"MessageBox"} onClick={() => props.setShowMessage(false)}>
-      <p>{props.message}</p>
+    <div className={"Box"} onClick={handleClick}>
+      {props.sign < 2 ? (props.sign === 1 ? "X" : "O") : ""}
     </div>
   );
 }
 
-export default MessageBox;
+export default Box;

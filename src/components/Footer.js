@@ -19,23 +19,14 @@
 import React from 'react';
 import './style.css';
 
-interface Props {
-  sign: number
-  index: number
-  setSign: (index: number) => void
-}
-
-const Box: React.FC<Props> = (props) => {
-  const handleClick = () => {
-    props.sign === 2 &&
-      props.setSign(props.index)
-  }
-  
+const Footer = () => {
   return (
-    <div className={"Box"} onClick={handleClick}>
-      {props.sign < 2 ? (props.sign === 1 ? "X" : "O") : ""}
+    <div className={"Footer"}>
+      <p><a href="https://github.com/MikunoNaka/tic-tac-toe">Tic Tac Toe</a>  Copyright (C) 2021  Vidhu Kant Sharma</p>
+      <p>This program comes with ABSOLUTELY NO WARRANTY; for details refer to <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPL Licence.</a></p>
+      <p>This is free software, and you are welcome to redistribute it under certain conditions; Refer to <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPL Licence</a> for details</p>
     </div>
   );
 }
 
-export default Box;
+export default Footer;

@@ -16,31 +16,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useState/*, useEffect*/, Dispatch, SetStateAction } from 'react';
+import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import Box from './Box';
 import './style.css';
 
-interface Props {
-  turn: number
-  setTurn: Dispatch<SetStateAction<number>>
-  scoreX: number
-  scoreO: number
-  setScoreX: Dispatch<SetStateAction<number>>
-  setScoreO: Dispatch<SetStateAction<number>>
-  setMessage: Dispatch<SetStateAction<string>>
-  setShowMessage: Dispatch<SetStateAction<boolean>>
-}
-
 const socket = io("http://localhost:5000");
 
-const MultiplayerGrid: React.FC<Props> = (props) => {
+const MultiplayerGrid = (props) => {
   // 0 is O, 1 is X, 2 is blank
-  const [board, setBoard] = useState<number[]>([2,2,2,2,2,2,2,2,2]);
+  const [board, setBoard] = useState([2,2,2,2,2,2,2,2,2]);
   const turn = props.turn;
 
-  const getBoard = (index: number) => {
-    const newBoard: number[] = board.slice(0, index).concat(turn).concat(board.slice(index+1, 9));
+  const getBoard = (index) => {
+    const newBoard = board.slice(0, index).concat(turn).concat(board.slice(index+1, 9));
     socket.emit("update-remote-data", {
       board: newBoard, 
       turn: turn, 
@@ -49,7 +38,7 @@ const MultiplayerGrid: React.FC<Props> = (props) => {
     });
   }
 
-  const endGame = (data: any) => {
+  const endGame = (data) => {
     props.setMessage(
       `${data.winner === "Data" ? "" : "WINNER: "}${data.winner}`
     );
@@ -63,7 +52,7 @@ const MultiplayerGrid: React.FC<Props> = (props) => {
     props.setTurn(data.winner === "Draw" ? turn : (data.winner === "X" ? 1 : 0));
   }
 
-  useState(() => {
+  useEffect(() => {
     socket.on("update-client-data", (data) => {
       setBoard(data.board);
       props.setTurn(data.turn);

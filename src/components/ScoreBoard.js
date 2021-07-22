@@ -19,14 +19,16 @@
 import React from 'react';
 import './style.css';
 
-const Footer: React.FC = () => {
+const ScoreBoard = (props) => {
   return (
-    <div className={"Footer"}>
-      <p><a href="https://github.com/MikunoNaka/tic-tac-toe">Tic Tac Toe</a>  Copyright (C) 2021  Vidhu Kant Sharma</p>
-      <p>This program comes with ABSOLUTELY NO WARRANTY; for details refer to <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPL Licence.</a></p>
-      <p>This is free software, and you are welcome to redistribute it under certain conditions; Refer to <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPL Licence</a> for details</p>
+    <div className={"ScoreBoardContainer"}>
+      <div className={"ScoreBoard"}>
+        <span>X: {props.scoreX}</span>
+        <span>O: {props.scoreO}</span>
+      </div>
+      <div className={"turnMessage"}>-- {props.turn === 0 ? "O" : "X"}'s turn --</div>
     </div>
   );
 }
 
-export default Footer;
+export default ScoreBoard;
