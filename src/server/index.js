@@ -21,18 +21,35 @@ const getLeftDiagonal = (board, i = 0) =>
 const getRightDiagonal = (board, i = 2) =>
   i >= 0 ? [getRow(board, 2-i)[i]].concat(getRightDiagonal(board, i-1)) : [];
 
+const getScore = (winner, scoreX, scoreO, board) => ({
+  winner: winner < 2 
+    ? (winner === 0 ? 'O' : 'X') 
+    : (board.includes(2) ? undefined : 'Draw'),
+  scoreX: winner === 1 ? scoreX + 1 : scoreX,
+  scoreO: winner === 0 ? scoreO + 1 : scoreO
+})
+
 io.on('connection', (socket) => {
   socket.on('update-remote-data', (data) => {
     console.log(data)
     if (data.board.includes(0) || data.board.includes(1)) {
       const rows = getRows(data.board);
-      (rows.some((i) => allEqual(i))
+      const winner = (rows.some((i) => allEqual(i))
         || getCols(rows).some((i) => allEqual(i))
         || [getLeftDiagonal(data.board), getRightDiagonal(data.board)].some((i) => allEqual(i))
-      ) ? io.emit('set winner', data.turn) : (data.board.includes(2) || io.emit('set draw'))
-    }
-    io.emit('update-client-data', {board: data.board, turn: data.turn === 0 ? 1 : 0});
-  })
+      ) ? data.turn : 2;
+
+      const score = getScore(winner, data.scoreX, data.scoreO, data.board)
+      io.emit('update-client-data', {
+        board: data.board, 
+        turn: data.turn === 0 ? 1 : 0,
+        score: score
+      });
+      
+      score.winner && console.log("sending winner")
+      score.winner && io.emit('update-winner', score)
+    };
+  });
 });
 
 // serve static front end

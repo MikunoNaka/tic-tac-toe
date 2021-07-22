@@ -41,41 +41,43 @@ const MultiplayerGrid: React.FC<Props> = (props) => {
 
   const getBoard = (index: number) => {
     const newBoard: number[] = board.slice(0, index).concat(turn).concat(board.slice(index+1, 9));
-    socket.emit("update-remote-data", {board: newBoard, turn: turn});
-    // props.setTurn(turn === 0 ? 1 : 0);
+    socket.emit("update-remote-data", {
+      board: newBoard, 
+      turn: turn, 
+      scoreX: props.scoreX,
+      scoreO: props.scoreO
+    });
   }
 
-  const endGame = (winner: number) => {
-    const gameWinner = winner < 2 ? (winner === 1 ? "X" : "O") : "Draw";
-    props.setMessage(`WINNER: ${gameWinner}`);
+  const endGame = (data: any) => {
+    props.setMessage(
+      `${data.winner === "Data" ? "" : "WINNER: "}${data.winner}`
+    );
     props.setShowMessage(true);
-    console.log(gameWinner, "X: ", props.scoreX, "O: ", props.scoreO);
+    props.setScoreX(data.scoreX);
+    props.setScoreO(data.scoreO);
 
-    gameWinner === "Draw" || (gameWinner === "X"
-      ? props.setScoreX(props.scoreX + 1)
-      : props.setScoreO(props.scoreO + 1));
-
-    console.log(gameWinner, "X: ", props.scoreX, "O: ", props.scoreO);
-    socket.emit("update-remote-data", {board: [2,2,2,2,2,2,2,2,2], turn: turn});
-    winner < 2 && props.setTurn(winner); // set turn to prev. winner
+    // socket.emit messes everything up
+    // and this does the job very well
+    setBoard([2,2,2,2,2,2,2,2,2]);
+    props.setTurn(data.winner === "Draw" ? turn : (data.winner === "X" ? 1 : 0));
   }
 
   useState(() => {
     socket.on("update-client-data", (data) => {
       setBoard(data.board);
       props.setTurn(data.turn);
+      props.setScoreX(data.score.scoreX);
+      props.setScoreO(data.score.scoreO);
     });
-    socket.on("set winner", (turn) => endGame(turn));
+    socket.on("update-winner", (data) => endGame(data));
   });
 
   return (
     <div className="Grid">
-      {
-        board.map(
-          (i, index) => 
-            <Box key={index} index={index} sign={i} setSign={getBoard}/>
-        )
-      }
+      {board.map((i, index) => 
+        <Box key={index} index={index} sign={i} setSign={getBoard}/>
+      )}
     </div>
   );
 }
