@@ -2,7 +2,15 @@ const express = require('express');
 const app = express();
 const http = require('http').Server(app);
 const path = require('path');
-const io = require('socket.io')(http);
+
+// const io = require('socket.io')(http);
+const io = require("socket.io")(http, {
+  cors: {
+    origin: ["http://localhost:5000", "http://localhost:3000"],
+    "Access-Control-Allow-Origin": "*",
+    methods: ["GET", "POST"]
+  }
+});
 
 const allEqual = (arr) =>
   arr.includes(2) ? false : arr.every(i => i === arr[0])
@@ -31,7 +39,6 @@ const getScore = (winner, scoreX, scoreO, board) => ({
 
 io.on('connection', (socket) => {
   socket.on('update-remote-data', (data) => {
-    console.log(data)
     if (data.board.includes(0) || data.board.includes(1)) {
       const rows = getRows(data.board);
       const winner = (rows.some((i) => allEqual(i))
@@ -42,11 +49,10 @@ io.on('connection', (socket) => {
       const score = getScore(winner, data.scoreX, data.scoreO, data.board)
       io.emit('update-client-data', {
         board: data.board, 
-        turn: data.turn === 0 ? 1 : 0,
+        turn: score.winner ? data.turn : (data.turn === 0 ? 1 : 0),
         score: score
       });
       
-      score.winner && console.log("sending winner")
       score.winner && io.emit('update-winner', score)
     };
   });
