@@ -24,13 +24,15 @@ import Footer from './Footer';
 import './style.css';
 
 const App = () => {
+  const [gameStarted, setGameStarted] = useState(false);
+  const [multiplayer, setMultiplayer] = useState(false);
   const [scoreX, setScoreX] = useState(0);
   const [scoreO, setScoreO] = useState(0);
   const [turn, setTurn] = useState(1);
   const [showMessageBox, setShowMessageBox] = useState(false);
   const [message, setMessage] = useState("");
-  const mp = true;
-  return (
+
+  return gameStarted ? (
     <>
       {showMessageBox && 
         <MessageBox 
@@ -45,7 +47,7 @@ const App = () => {
         scoreO={scoreO}
       />
 
-      {mp ? <MultiplayerGrid 
+      {multiplayer ? <MultiplayerGrid 
           turn={turn} 
           setTurn={setTurn} 
           scoreX={scoreX} 
@@ -64,6 +66,25 @@ const App = () => {
         />
       }
 
+      <Footer/>
+    </>
+  ) : (
+    <>
+      <div className={"GamemodeChooser"}>
+        <div className={"GamemodeButton"} onClick={() => {
+          setGameStarted(true);
+          setMultiplayer(false);
+        }}>
+          SINGLE PLAYER
+        </div>
+
+        <div className={"GamemodeButton"} onClick={() => {
+          setGameStarted(true);
+          setMultiplayer(true);
+        }}>
+          MULTIPLAYER
+        </div>
+      </div>
       <Footer/>
     </>
   );
