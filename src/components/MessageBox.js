@@ -19,22 +19,12 @@
 import React from 'react';
 import './style.css';
 
-interface Props {
-  scoreX: number
-  scoreO: number
-  turn: number
-}
-
-const ScoreBoard: React.FC<Props> = (props) => {
+const MessageBox = (props) => {
   return (
-    <div className={"ScoreBoardContainer"}>
-      <div className={"ScoreBoard"}>
-        <span>X: {props.scoreX}</span>
-        <span>O: {props.scoreO}</span>
-      </div>
-      <div className={"turnMessage"}>-- {props.turn === 0 ? "O" : "X"}'s turn --</div>
+    <div className={"MessageBox"} onClick={() => props.setShowMessage(false)}>
+      <p>{props.message}</p>
     </div>
   );
 }
 
-export default ScoreBoard;
+export default MessageBox;

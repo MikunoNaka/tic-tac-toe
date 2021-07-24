@@ -16,20 +16,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, {Dispatch, SetStateAction} from 'react';
+import React from 'react';
 import './style.css';
 
-interface Props {
-  message: string
-  setShowMessage: Dispatch<SetStateAction<boolean>>
-}
-
-const MessageBox: React.FC<Props> = (props) => {
+const ScoreBoard = (props) => {
   return (
-    <div className={"MessageBox"} onClick={() => props.setShowMessage(false)}>
-      <p>{props.message}</p>
+    <div className={"ScoreBoardContainer"}>
+      <div className={"ScoreBoard"}>
+        <span>X: {props.scoreX}</span>
+        <span>O: {props.scoreO}</span>
+      </div>
+      <div className={"turnMessage"}>
+        -- 
+        {` ${props.turn === 0 ? "O" : "X"}'s turn `}
+        {props.multiplayer && ` (You are ${props.isHost ? "'X'" : "'O'"}) `}
+        --
+      </div>
     </div>
   );
 }
 
-export default MessageBox;
+export default ScoreBoard;

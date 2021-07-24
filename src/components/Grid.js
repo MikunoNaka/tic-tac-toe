@@ -16,49 +16,38 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useState, useEffect, Dispatch, SetStateAction } from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from './Box';
 import './style.css';
 
-interface Props {
-  turn: number
-  setTurn: Dispatch<SetStateAction<number>>
-  scoreX: number
-  scoreO: number
-  setScoreX: Dispatch<SetStateAction<number>>
-  setScoreO: Dispatch<SetStateAction<number>>
-  setMessage: Dispatch<SetStateAction<string>>
-  setShowMessage: Dispatch<SetStateAction<boolean>>
-}
-
-const Grid: React.FC<Props> = (props) => {
+const Grid = (props) => {
   // 0 is O, 1 is X, 2 is blank
-  const [board, setBoard] = useState<number[]>([2,2,2,2,2,2,2,2,2]);
+  const [board, setBoard] = useState([2,2,2,2,2,2,2,2,2]);
   const turn = props.turn;
 
-  const getBoard = (index: number) => {
+  const getBoard = (index) => {
     setBoard(board.slice(0, index).concat(turn).concat(board.slice(index+1, 9)));
     props.setTurn(turn === 1 ? 0 : 1)
   }
 
-  const allEqual = (arr: number[]) =>
+  const allEqual = (arr) =>
     arr.includes(2) ? false : arr.every(i => i === arr[0])
 
-  const getRow = (r: number) => board.slice(r * 3, (r * 3) + 3);
-  const getRows: any = (r: number = 0) => 
+  const getRow = (r) => board.slice(r * 3, (r * 3) + 3);
+  const getRows = (r = 0) => 
     r <= 2 ? [getRow(r)].concat(getRows(r+1)) : getRow(r) 
 
-  const getCol = (arr: number[][], c: number) => arr.map((i: any) => i[c])
-  const getCols: any = (rows: number[][], c: number = 0) => 
+  const getCol = (arr, c) => arr.map((i) => i[c])
+  const getCols = (rows, c = 0) => 
     c < 2 ? [getCol(rows, c)].concat(getCols(rows, c+1)) : [getCol(rows, c)]
 
-  const getLeftDiagonal: any = (i: number = 0) =>
+  const getLeftDiagonal = (i = 0) =>
     i < 3 ? [getRow(i)[i]].concat(getLeftDiagonal(i+1)) : [];
 
-  const getRightDiagonal: any = (i: number = 2) =>
+  const getRightDiagonal = (i = 2) =>
     i >= 0 ? [getRow(2-i)[i]].concat(getRightDiagonal(i-1)) : [];
 
-  const endGame = (winner: number) => {
+  const endGame = (winner) => {
     const gameWinner = winner < 2 ? (winner === 1 ? "X" : "O") : "Draw";
     props.setMessage(`WINNER: ${gameWinner}`);
     props.setShowMessage(true);
@@ -72,21 +61,18 @@ const Grid: React.FC<Props> = (props) => {
   useEffect(() => {
     if (board.includes(0) || board.includes(1)) {
       const rows = getRows();
-      (rows.some((i: number[]) => allEqual(i))
-        || getCols(rows).some((i: number[]) => allEqual(i))
+      (rows.some((i) => allEqual(i))
+        || getCols(rows).some((i) => allEqual(i))
         || [getLeftDiagonal(), getRightDiagonal()].some((i) => allEqual(i))
       ) ? endGame(turn === 0 ? 1 : 0) : (board.includes(2) || endGame(2));
     }
   });
 
   return (
-      <div className="Grid">
-      {
-        board.map(
-          (i, index) => 
-            <Box key={index} index={index} sign={i} setSign={getBoard}/>
-        )
-      }
+    <div className="Grid">
+      {board.map((i, index) => 
+        <Box key={index} index={index} sign={i} setSign={getBoard}/>
+      )}
     </div>
   );
 }
