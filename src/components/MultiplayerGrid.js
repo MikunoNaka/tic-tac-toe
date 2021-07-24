@@ -29,6 +29,9 @@ const MultiplayerGrid = (props) => {
   const turn = props.turn;
 
   const getBoard = (index) => {
+    // if it's not your turn you can't play
+    if ((turn === 0) === props.isHost) return;
+
     const newBoard = board.slice(0, index).concat(turn).concat(board.slice(index+1, 9));
     socket.emit("update-remote-data", {
       board: newBoard, 

@@ -16,6 +16,7 @@
  */
 
 import React, { useState } from 'react';
+import GamemodeChooser from './GamemodeChooser';
 import MessageBox from './MessageBox';
 import ScoreBoard from './ScoreBoard';
 import Grid from './Grid';
@@ -31,6 +32,7 @@ const App = () => {
   const [turn, setTurn] = useState(1);
   const [showMessageBox, setShowMessageBox] = useState(false);
   const [message, setMessage] = useState("");
+  const [isHost, setIsHost] = useState(false);
 
   return gameStarted ? (
     <>
@@ -45,14 +47,18 @@ const App = () => {
         turn={turn} 
         scoreX={scoreX} 
         scoreO={scoreO}
+        multiplayer={multiplayer}
+        isHost={isHost}
       />
 
       {multiplayer ? <MultiplayerGrid 
           turn={turn} 
+          isHost={isHost}
           setTurn={setTurn} 
           scoreX={scoreX} 
           setScoreX={setScoreX} 
-          scoreO={scoreO} setScoreO={setScoreO} 
+          scoreO={scoreO} 
+          setScoreO={setScoreO} 
           setMessage={setMessage} 
           setShowMessage={setShowMessageBox}
         /> : <Grid 
@@ -60,7 +66,8 @@ const App = () => {
           setTurn={setTurn} 
           scoreX={scoreX} 
           setScoreX={setScoreX} 
-          scoreO={scoreO} setScoreO={setScoreO} 
+          scoreO={scoreO} 
+          setScoreO={setScoreO} 
           setMessage={setMessage} 
           setShowMessage={setShowMessageBox}
         />
@@ -70,21 +77,11 @@ const App = () => {
     </>
   ) : (
     <>
-      <div className={"GamemodeChooser"}>
-        <div className={"GamemodeButton"} onClick={() => {
-          setGameStarted(true);
-          setMultiplayer(false);
-        }}>
-          SINGLE PLAYER
-        </div>
-
-        <div className={"GamemodeButton"} onClick={() => {
-          setGameStarted(true);
-          setMultiplayer(true);
-        }}>
-          MULTIPLAYER
-        </div>
-      </div>
+      <GamemodeChooser
+        setMultiplayer={setMultiplayer}
+        setGameStarted={setGameStarted}
+        setIsHost={setIsHost}
+      />
       <Footer/>
     </>
   );
