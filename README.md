@@ -4,6 +4,8 @@ Minimalistic Tic Tac Toe game, written in React.
 
 For some reason, I've made the code as functional as I can make it
 
+This game is hosted (here)[https://mikunonaka-tic-tac-toe.herokuapp.com/].
+
 ## Licence
 
 Licenced under the GNU General Public Licence

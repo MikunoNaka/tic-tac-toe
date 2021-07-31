@@ -30,14 +30,14 @@ const GamemodeChooser = (props) => {
             props.setGameStarted(true);
             props.setMultiplayer(false);
           }}>
-            SINGLE PLAYER
+            LOCAL
           </div>
 
           <div className={"GamemodeButton"} onClick={() => {
             setShowMPMenu(true);
             props.setMultiplayer(true);
           }}>
-            MULTIPLAYER (beta)
+            ONLINE
           </div>
         </>
       }
