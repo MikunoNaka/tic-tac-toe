@@ -15,24 +15,45 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import './style.css';
 
 const MultiplayerMenu = (props) => {
+  const [showCodeInput, setShowCodeInput] = useState(false)
+  const [joinCode, setJoinCode] = useState("");
+
   return (
     <div className={"MultiplayerMenu"}>
-      <div className={"GamemodeButton"} onClick={() => {
-        props.setIsHost(true);
-        props.setGameStarted(true);
-      }}>
-        HOST GAME
-      </div>
+      {showCodeInput 
+        ? <>
+          <input type="text" placeholder={"ENTER CODE"}
+            className={"GamemodeButton"} onChange={
+              (event) => setJoinCode(event.target.value)
+            }
+          />
 
-      <div className={"GamemodeButton"} onClick={() => {
-        props.setGameStarted(true);
-      }}>
-        JOIN GAME
-      </div>
+          <div className={"GamemodeButton"} onClick={() => {
+            props.setGameStarted(true);
+            props.setJoinCode(joinCode);
+          }}>
+            START
+          </div>
+        </>
+        : <>
+          <div className={"GamemodeButton"} onClick={() => {
+            props.setIsHost(true);
+            props.setGameStarted(true);
+          }}>
+            HOST GAME
+          </div>
+
+          <div className={"GamemodeButton"} onClick={() => {
+            setShowCodeInput(true);
+          }}>
+            JOIN GAME
+          </div>
+        </>
+      }
     </div>
   );
 }

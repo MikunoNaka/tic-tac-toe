@@ -3,14 +3,36 @@ const app = express();
 const http = require('http').Server(app);
 const path = require('path');
 
-// const io = require('socket.io')(http);
 const io = require("socket.io")(http, {
   cors: {
-    origin: ["http://localhost:5000", "http://localhost:3000"],
+    origin: [
+      "http://localhost:5000", 
+      "http://localhost:3000",
+      "https://mikunonaka-tic-tac-toe.herokuapp.com", 
+      "http://mikunonaka-tic-tac-toe.herokuapp.com"
+    ],
     "Access-Control-Allow-Origin": "*",
     methods: ["GET", "POST"]
   }
 });
+
+// check if room exists
+const checkCode = (code) => {
+  const connectedSockets = [];
+  io.sockets.sockets.forEach(
+    (i) => connectedSockets.push(i)
+  );
+
+  // returns true if room exists
+  return connectedSockets.some(
+    (i) => Array.from(i.rooms)[1] === code
+  );
+}
+
+// generate new room code
+// also checks for duplicates
+const getCode = (code = `${Math.floor(1000 + Math.random() * 9000)}`) =>
+  checkCode(code) ? getCode : code;
 
 const allEqual = (arr) =>
   arr.includes(2) ? false : arr.every(i => i === arr[0])
@@ -38,7 +60,25 @@ const getScore = (winner, scoreX, scoreO, board) => ({
 })
 
 io.on('connection', (socket) => {
+  socket.on('host', () => {
+    const code = getCode();
+    socket.join(code);
+    io.to(code).emit('broadcast code', code);
+  });
+
+  socket.on('join', (code) => {
+    if (checkCode(code)) {
+      socket.join(code);
+      io.to(code).emit('player joined');
+    } else {
+      // error if room doesn't exist
+      socket.emit('join failed')
+    }
+  });
+
   socket.on('update-remote-data', (data) => {
+    const room = Array.from(socket.rooms)[1]
+
     if (data.board.includes(0) || data.board.includes(1)) {
       const rows = getRows(data.board);
       const winner = (rows.some((i) => allEqual(i))
@@ -47,13 +87,13 @@ io.on('connection', (socket) => {
       ) ? data.turn : 2;
 
       const score = getScore(winner, data.scoreX, data.scoreO, data.board)
-      io.emit('update-client-data', {
+      io.to(room).emit('update-client-data', {
         board: data.board, 
         turn: score.winner ? data.turn : (data.turn === 0 ? 1 : 0),
         score: score
       });
       
-      score.winner && io.emit('update-winner', score)
+      score.winner && io.to(room).emit('update-winner', score)
     };
   });
 });

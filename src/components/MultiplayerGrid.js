@@ -26,11 +26,43 @@ const socket = io("http://localhost:5000");
 const MultiplayerGrid = (props) => {
   // 0 is O, 1 is X, 2 is blank
   const [board, setBoard] = useState([2,2,2,2,2,2,2,2,2]);
+
   const turn = props.turn;
+  const isHost = props.isHost;
+  const joinCode = props.joinCode;
+  const setMessage = props.setMessage;
+  const setShowMessage = props.setShowMessage;
+
+  // host/join room
+  useEffect(() => {
+    if (isHost) {
+      socket.emit("host");
+
+      socket.on("broadcast code", (code) => {
+        setMessage(`Game Code: ${code}`);
+        setShowMessage(true);
+      });
+
+      socket.on("player joined", () => {
+        setMessage("Opponent Joined")
+        setShowMessage(true)
+        setTimeout(() => setShowMessage(false), 3000)
+      })
+    } else {
+      socket.emit("join", joinCode);
+
+      // error if room doesn't exist
+      socket.on("join failed", () => {
+        setMessage("Error: room not found")
+        setShowMessage(true)
+        setTimeout(() => window.location.reload(), 3000)
+      });
+    }
+  }, [isHost, setMessage, setShowMessage, joinCode]);
 
   const getBoard = (index) => {
     // if it's not your turn you can't play
-    if ((turn === 0) === props.isHost) return;
+    if ((turn === 0) === isHost) return;
 
     const newBoard = board.slice(0, index).concat(turn).concat(board.slice(index+1, 9));
     socket.emit("update-remote-data", {
@@ -42,10 +74,10 @@ const MultiplayerGrid = (props) => {
   }
 
   const endGame = (data) => {
-    props.setMessage(
+    setMessage(
       `${data.winner === "Data" ? "" : "WINNER: "}${data.winner}`
     );
-    props.setShowMessage(true);
+    setShowMessage(true);
     props.setScoreX(data.scoreX);
     props.setScoreO(data.scoreO);
 
