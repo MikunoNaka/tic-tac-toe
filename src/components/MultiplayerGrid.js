@@ -32,6 +32,7 @@ const MultiplayerGrid = (props) => {
   const setMessage = props.setMessage;
   const setShowMessage = props.setShowMessage;
 
+  // host/join room
   useEffect(() => {
     if (isHost) {
       socket.emit("host");
@@ -41,14 +42,20 @@ const MultiplayerGrid = (props) => {
         setShowMessage(true);
       });
 
-      socket.on('user joined', () => {
+      socket.on("player joined", () => {
         setMessage("Opponent Joined")
         setShowMessage(true)
         setTimeout(() => setShowMessage(false), 3000)
       })
     } else {
       socket.emit("join", prompt("Enter ID"));
-      socket.on("join fail", () => alert("join fail"));
+
+      // error if room doesn't exist
+      socket.on("join failed", () => {
+        setMessage("Error: room not found")
+        setShowMessage(true)
+        setTimeout(() => window.location.reload(), 3000)
+      });
     }
   }, [isHost, setMessage, setShowMessage]);
 

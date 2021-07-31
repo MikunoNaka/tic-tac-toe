@@ -12,19 +12,23 @@ const io = require("socket.io")(http, {
   }
 });
 
-// also checks for duplicates
-const getCode = () => {
-  const code = `${Math.floor(1000 + Math.random() * 9000)}`;
-
+// check if room exists
+const checkCode = (code) => {
   const connectedSockets = [];
   io.sockets.sockets.forEach(
     (i) => connectedSockets.push(i)
   );
 
+  // returns true if room exists
   return connectedSockets.some(
     (i) => Array.from(i.rooms)[1] === code
-  ) ? getCode() : code;
+  );
 }
+
+// generate new room code
+// also checks for duplicates
+const getCode = (code = `${Math.floor(1000 + Math.random() * 9000)}`) =>
+  checkCode(code) ? getCode : code;
 
 const allEqual = (arr) =>
   arr.includes(2) ? false : arr.every(i => i === arr[0])
@@ -59,8 +63,13 @@ io.on('connection', (socket) => {
   });
 
   socket.on('join', (code) => {
-    socket.join(code);
-    io.to(code).emit('user joined');
+    if (checkCode(code)) {
+      socket.join(code);
+      io.to(code).emit('player joined');
+    } else {
+      // error if room doesn't exist
+      socket.emit('join failed')
+    }
   });
 
   socket.on('update-remote-data', (data) => {
