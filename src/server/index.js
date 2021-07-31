@@ -37,6 +37,8 @@ const getScore = (winner, scoreX, scoreO, board) => ({
   scoreO: winner === 0 ? scoreO + 1 : scoreO
 })
 
+// old WORKING code
+/*
 io.on('connection', (socket) => {
   socket.on('update-remote-data', (data) => {
     if (data.board.includes(0) || data.board.includes(1)) {
@@ -54,6 +56,43 @@ io.on('connection', (socket) => {
       });
       
       score.winner && io.emit('update-winner', score)
+    };
+  });
+});
+*/
+
+const getID = () => Math.floor(1000 + Math.random() * 9000);
+
+io.on('connection', (socket) => {
+  socket.on('host', () => {
+    const id = (`${getID()}`);
+    socket.join(id);
+    io.to(id).emit('set-host-id', id)
+  });
+
+  socket.on('join', (id) => {
+    socket.join(id)
+    // TODO: send confirmation
+  });
+
+  socket.on('update-remote-data', (data) => {
+    const room = Array.from(socket.rooms)[1]
+
+    if (data.board.includes(0) || data.board.includes(1)) {
+      const rows = getRows(data.board);
+      const winner = (rows.some((i) => allEqual(i))
+        || getCols(rows).some((i) => allEqual(i))
+        || [getLeftDiagonal(data.board), getRightDiagonal(data.board)].some((i) => allEqual(i))
+      ) ? data.turn : 2;
+
+      const score = getScore(winner, data.scoreX, data.scoreO, data.board)
+      io.to(room).emit('update-client-data', {
+        board: data.board, 
+        turn: score.winner ? data.turn : (data.turn === 0 ? 1 : 0),
+        score: score
+      });
+      
+      score.winner && io.to(room).emit('update-winner', score)
     };
   });
 });

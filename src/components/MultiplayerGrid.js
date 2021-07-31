@@ -28,9 +28,19 @@ const MultiplayerGrid = (props) => {
   const [board, setBoard] = useState([2,2,2,2,2,2,2,2,2]);
   const turn = props.turn;
 
+  const isHost = props.isHost;
+  useEffect(() => {
+    if (isHost) {
+      socket.emit("host");
+      socket.on("set-host-id", (id) => alert(id));
+    } else {
+      socket.emit("join", prompt("Enter ID"));
+    }
+  }, [isHost]);
+
   const getBoard = (index) => {
     // if it's not your turn you can't play
-    if ((turn === 0) === props.isHost) return;
+    if ((turn === 0) === isHost) return;
 
     const newBoard = board.slice(0, index).concat(turn).concat(board.slice(index+1, 9));
     socket.emit("update-remote-data", {
