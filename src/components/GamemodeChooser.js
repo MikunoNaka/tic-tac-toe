@@ -47,6 +47,7 @@ const GamemodeChooser = (props) => {
           <MultiplayerMenu
             setIsHost={props.setIsHost}
             setGameStarted={props.setGameStarted}
+            setJoinCode={props.setJoinCode}
           />
 
           <div className={"GamemodeButton"} onClick={() => {

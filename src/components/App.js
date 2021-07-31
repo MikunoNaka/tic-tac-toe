@@ -33,6 +33,7 @@ const App = () => {
   const [showMessageBox, setShowMessageBox] = useState(false);
   const [message, setMessage] = useState("");
   const [isHost, setIsHost] = useState(false);
+  const [joinCode, setJoinCode] = useState();
 
   return gameStarted ? (
     <>
@@ -61,6 +62,7 @@ const App = () => {
           setScoreO={setScoreO} 
           setMessage={setMessage} 
           setShowMessage={setShowMessageBox}
+          joinCode={joinCode}
         /> : <Grid 
           turn={turn} 
           setTurn={setTurn} 
@@ -81,6 +83,7 @@ const App = () => {
         setMultiplayer={setMultiplayer}
         setGameStarted={setGameStarted}
         setIsHost={setIsHost}
+        setJoinCode={setJoinCode}
       />
       <Footer/>
     </>

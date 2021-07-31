@@ -29,6 +29,7 @@ const MultiplayerGrid = (props) => {
 
   const turn = props.turn;
   const isHost = props.isHost;
+  const joinCode = props.joinCode;
   const setMessage = props.setMessage;
   const setShowMessage = props.setShowMessage;
 
@@ -48,7 +49,7 @@ const MultiplayerGrid = (props) => {
         setTimeout(() => setShowMessage(false), 3000)
       })
     } else {
-      socket.emit("join", prompt("Enter ID"));
+      socket.emit("join", joinCode);
 
       // error if room doesn't exist
       socket.on("join failed", () => {
@@ -57,7 +58,7 @@ const MultiplayerGrid = (props) => {
         setTimeout(() => window.location.reload(), 3000)
       });
     }
-  }, [isHost, setMessage, setShowMessage]);
+  }, [isHost, setMessage, setShowMessage, joinCode]);
 
   const getBoard = (index) => {
     // if it's not your turn you can't play

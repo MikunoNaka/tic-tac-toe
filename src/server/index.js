@@ -3,10 +3,14 @@ const app = express();
 const http = require('http').Server(app);
 const path = require('path');
 
-// const io = require('socket.io')(http);
 const io = require("socket.io")(http, {
   cors: {
-    origin: ["http://localhost:5000", "http://localhost:3000"],
+    origin: [
+      "http://localhost:5000", 
+      "http://localhost:3000",
+      "https://mikunonaka-tic-tac-toe.herokuapp.com", 
+      "http://mikunonaka-tic-tac-toe.herokuapp.com"
+    ],
     "Access-Control-Allow-Origin": "*",
     methods: ["GET", "POST"]
   }
