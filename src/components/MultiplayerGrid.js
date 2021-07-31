@@ -26,17 +26,31 @@ const socket = io("http://localhost:5000");
 const MultiplayerGrid = (props) => {
   // 0 is O, 1 is X, 2 is blank
   const [board, setBoard] = useState([2,2,2,2,2,2,2,2,2]);
-  const turn = props.turn;
 
+  const turn = props.turn;
   const isHost = props.isHost;
+  const setMessage = props.setMessage;
+  const setShowMessage = props.setShowMessage;
+
   useEffect(() => {
     if (isHost) {
       socket.emit("host");
-      socket.on("set-host-id", (id) => alert(id));
+
+      socket.on("broadcast code", (code) => {
+        setMessage(`Game Code: ${code}`);
+        setShowMessage(true);
+      });
+
+      socket.on('user joined', () => {
+        setMessage("Opponent Joined")
+        setShowMessage(true)
+        setTimeout(() => setShowMessage(false), 3000)
+      })
     } else {
       socket.emit("join", prompt("Enter ID"));
+      socket.on("join fail", () => alert("join fail"));
     }
-  }, [isHost]);
+  }, [isHost, setMessage, setShowMessage]);
 
   const getBoard = (index) => {
     // if it's not your turn you can't play
@@ -52,10 +66,10 @@ const MultiplayerGrid = (props) => {
   }
 
   const endGame = (data) => {
-    props.setMessage(
+    setMessage(
       `${data.winner === "Data" ? "" : "WINNER: "}${data.winner}`
     );
-    props.setShowMessage(true);
+    setShowMessage(true);
     props.setScoreX(data.scoreX);
     props.setScoreO(data.scoreO);
 

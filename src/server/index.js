@@ -12,6 +12,20 @@ const io = require("socket.io")(http, {
   }
 });
 
+// also checks for duplicates
+const getCode = () => {
+  const code = `${Math.floor(1000 + Math.random() * 9000)}`;
+
+  const connectedSockets = [];
+  io.sockets.sockets.forEach(
+    (i) => connectedSockets.push(i)
+  );
+
+  return connectedSockets.some(
+    (i) => Array.from(i.rooms)[1] === code
+  ) ? getCode() : code;
+}
+
 const allEqual = (arr) =>
   arr.includes(2) ? false : arr.every(i => i === arr[0])
 
@@ -37,42 +51,16 @@ const getScore = (winner, scoreX, scoreO, board) => ({
   scoreO: winner === 0 ? scoreO + 1 : scoreO
 })
 
-// old WORKING code
-/*
-io.on('connection', (socket) => {
-  socket.on('update-remote-data', (data) => {
-    if (data.board.includes(0) || data.board.includes(1)) {
-      const rows = getRows(data.board);
-      const winner = (rows.some((i) => allEqual(i))
-        || getCols(rows).some((i) => allEqual(i))
-        || [getLeftDiagonal(data.board), getRightDiagonal(data.board)].some((i) => allEqual(i))
-      ) ? data.turn : 2;
-
-      const score = getScore(winner, data.scoreX, data.scoreO, data.board)
-      io.emit('update-client-data', {
-        board: data.board, 
-        turn: score.winner ? data.turn : (data.turn === 0 ? 1 : 0),
-        score: score
-      });
-      
-      score.winner && io.emit('update-winner', score)
-    };
-  });
-});
-*/
-
-const getID = () => Math.floor(1000 + Math.random() * 9000);
-
 io.on('connection', (socket) => {
   socket.on('host', () => {
-    const id = (`${getID()}`);
-    socket.join(id);
-    io.to(id).emit('set-host-id', id)
+    const code = getCode();
+    socket.join(code);
+    io.to(code).emit('broadcast code', code);
   });
 
-  socket.on('join', (id) => {
-    socket.join(id)
-    // TODO: send confirmation
+  socket.on('join', (code) => {
+    socket.join(code);
+    io.to(code).emit('user joined');
   });
 
   socket.on('update-remote-data', (data) => {
