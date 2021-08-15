@@ -27,10 +27,10 @@ const ScoreBoard = (props) => {
         <span>O: {props.scoreO}</span>
       </div>
       <div className={"turnMessage"}>
-        -- 
-        {` ${props.turn === 0 ? "O" : "X"}'s turn `}
-        {props.multiplayer && ` (You are ${props.isHost ? "'X'" : "'O'"}) `}
-        --
+        -- {props.multiplayer 
+          ? ` ${props.turn === 0 ? (props.isHost ? "Opponent's turn" : "Your turn") : (props.isHost ? "Your turn" : "Opponent's turn")} `
+          : ` ${props.turn === 0 ? "O" : "X"}'s turn `
+        } -- 
       </div>
     </div>
   );
