@@ -89,7 +89,7 @@ io.on('connection', (socket) => {
       const score = getScore(winner, data.scoreX, data.scoreO, data.board)
       io.to(room).emit('update-client-data', {
         board: data.board, 
-        turn: score.winner ? data.turn : (data.turn === 0 ? 1 : 0),
+        turn: (data.turn === 0 ? 1 : 0),
         score: score
       });
       

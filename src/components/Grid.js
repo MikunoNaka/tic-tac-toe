@@ -49,13 +49,13 @@ const Grid = (props) => {
 
   const endGame = (winner) => {
     const gameWinner = winner < 2 ? (winner === 1 ? "X" : "O") : "Draw";
-    props.setMessage(`WINNER: ${gameWinner}`);
+    props.setMessage(`${gameWinner === "Draw" ? "" : "WINNER: "}${gameWinner}`);
     props.setShowMessage(true);
     gameWinner === "Draw" || (gameWinner === "X" 
       ? props.setScoreX(props.scoreX + 1)
       : props.setScoreO(props.scoreO + 1));
     setBoard([2,2,2,2,2,2,2,2,2]);
-    winner < 2 && props.setTurn(winner); // set turn to prev. winner
+    // winner < 2 && props.setTurn(winner); // set turn to prev. winner
   }
 
   useEffect(() => {

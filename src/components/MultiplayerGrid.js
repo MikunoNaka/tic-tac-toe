@@ -75,16 +75,13 @@ const MultiplayerGrid = (props) => {
 
   const endGame = (data) => {
     setMessage(
-      `${data.winner === "Data" ? "" : "WINNER: "}${data.winner}`
+      `${data.winner === "Draw" ? "" : "WINNER: "}${data.winner}`
     );
     setShowMessage(true);
     props.setScoreX(data.scoreX);
     props.setScoreO(data.scoreO);
 
-    // socket.emit messes everything up
-    // and this does the job very well
     setBoard([2,2,2,2,2,2,2,2,2]);
-    props.setTurn(data.winner === "Draw" ? turn : (data.winner === "X" ? 1 : 0));
   }
 
   useEffect(() => {
